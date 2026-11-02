@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   windows:
     runs-on: windows-latest
@@ -27,3 +30,14 @@ jobs:
         with:
           name: KeyShift-VST3-Windows
           path: dist/KeyShift.vst3
+
+      - name: Comprimir
+        shell: pwsh
+        run: Compress-Archive -Path dist/KeyShift.vst3 -DestinationPath KeyShift-VST3-Windows.zip
+
+      - name: Publicar descarga
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: descarga
+          name: KeyShift VST3 (Windows)
+          files: KeyShift-VST3-Windows.zip
